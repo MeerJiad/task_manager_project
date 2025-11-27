@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager_project/app.dart';
 import 'package:task_manager_project/ui/screens/update_profile_screen.dart';
 
-class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
+class TMAppBar extends StatefulWidget implements PreferredSizeWidget {
   //Here 'Tm' means Task manager
   //App bar takes 'PreferredSizeWidget' but we need stateless also to done the ui,that's why we have implemented PreferredSizeWidget here in order to use it in the appBar.
   const TMAppBar({
@@ -15,8 +16,18 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool ifAddNewTaskScreen;
 
   @override
+  State<TMAppBar> createState() => _TMAppBarState();
+
+  @override
+  Size get preferredSize => const Size.fromHeight(
+      kToolbarHeight); //as we implemented PreferredSizeWidget then we need to override the size of the appbar,it stays kToolBarHeight in the constant dart file by default(height) and we gave the same.
+}
+
+class _TMAppBarState extends State<TMAppBar> {
+  @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    //final currentTheme = Theme.of(context).brightness;
     return AppBar(
         title: Row(
           //    //we are using title instead of leading because leading stays square and on the left so does some problem with our ui
@@ -24,7 +35,7 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
           children: [
             GestureDetector(
               onTap: () {
-                if (!ifUpdateProfileScreen) {
+                if (!widget.ifUpdateProfileScreen) {
                   //the condition means 'ifUpdateProfileScreen == false;
                   Navigator.pushNamed(context, UpdateProfileScreen.name);
                 }
@@ -41,12 +52,11 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
                   children: [
                     Text(
                       'Meer Sun',
-                      style:
-                          textTheme.bodyMedium?.copyWith(color: Colors.white),
+                      style: textTheme.labelLarge,
                     ),
                     Text(
                       'meersun08@gmail.com',
-                      style: textTheme.bodySmall?.copyWith(color: Colors.white),
+                      style: textTheme.bodySmall,
                     ),
                   ],
                 ),
@@ -54,18 +64,15 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ],
         ),
-        actions: ifAddNewTaskScreen
-            ? null
-            : [
-                //we can't directly write if-else in the actions that why we used turnery operator here in order to avoid showing logout button in the addNewTask Screen.
-                IconButton(
+        actions: [
+
+          //we can't directly write if-else in the actions that why we used turnery operator here in order to avoid showing logout button in the addNewTask Screen.
+          widget.ifAddNewTaskScreen
+              ? const SizedBox.shrink()
+              : IconButton(
                   onPressed: () {},
                   icon: const Icon(Icons.logout_outlined),
                 ),
-              ]);
+        ]);
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(
-      kToolbarHeight); //as we implemented PreferredSizeWidget then we need to override the size of the appbar,it stays kToolBarHeight in the constant dart file by default(height) and we gave the same.
 }

@@ -30,7 +30,7 @@ class BackgroundScreen extends StatelessWidget {
         ),
         Scaffold(
           floatingActionButton: floatingActionButton,
-          backgroundColor: Colors.transparent,
+
           resizeToAvoidBottomInset: true,
           //it means when keyboard/any ui element will come from the bottom then the scaffold size will not be resized so the backGroundSvg picture will not be shrinked or resized.
           appBar: appBar,

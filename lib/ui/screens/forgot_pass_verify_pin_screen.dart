@@ -22,6 +22,7 @@ class _ForgotPassVerifyPinScreenState extends State<ForgotPassVerifyPinScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     TextTheme textTheme = Theme.of(context).textTheme;
     return BackgroundScreen(
         child: SingleChildScrollView(
@@ -73,6 +74,7 @@ class _ForgotPassVerifyPinScreenState extends State<ForgotPassVerifyPinScreen> {
   }
 
   Widget buildPinCodeTextField() {
+    final bool lightMode = Theme.of(context).brightness == Brightness.light;
     return PinCodeTextField(
       controller: _pinTEC,
       keyboardType: TextInputType.number,
@@ -82,14 +84,14 @@ class _ForgotPassVerifyPinScreenState extends State<ForgotPassVerifyPinScreen> {
       enableActiveFill: true,
       animationType: AnimationType.fade,
       showCursor: true,
-      cursorColor: Colors.black,
+      cursorColor: lightMode ? Colors.black : Colors.white,
       animationDuration: const Duration(milliseconds: 300),
       pinTheme: PinTheme(
         fieldHeight: 50,
         fieldWidth: 50,
-        activeFillColor: Colors.white,
-        inactiveFillColor: Colors.white,
-        selectedFillColor: Colors.white,
+        activeFillColor: lightMode ? Colors.white : Colors.grey[900],
+        inactiveFillColor:lightMode ? Colors.white : Colors.grey[900],
+        selectedFillColor: lightMode ? Colors.white : Colors.grey[900],
         selectedColor: AppColors.themeColor,
         inactiveColor: Colors.grey,
         shape: PinCodeFieldShape.box,

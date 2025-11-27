@@ -5,7 +5,7 @@ import 'package:task_manager_project/ui/screens/forgot_pass_verify_email_screen.
 import 'package:task_manager_project/ui/screens/sign_up_screen.dart';
 import 'package:task_manager_project/ui/widgets/background_screen_widget.dart';
 import 'package:task_manager_project/ui/widgets/pass_TFF_widget.dart';
-import '../utils/app_colors.dart';
+import 'package:task_manager_project/ui/widgets/sign_in_and_sign_up_rich_text_widget.dart';
 import 'main_bottom_nav_screen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -63,7 +63,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     Navigator.pushReplacementNamed(
                         context, MainBottomNavScreen.name);
                   },
-                  child: const Icon(CupertinoIcons.arrow_right_circle),
+                  child: const Icon(
+                    CupertinoIcons.arrow_right_circle,
+                  ),
                 ),
                 const SizedBox(
                   height: 70,
@@ -78,7 +80,14 @@ class _SignInScreenState extends State<SignInScreen> {
                         },
                         child: const Text('Forgot Password?'),
                       ),
-                      _buildRichText(),
+                      SignInAndSignUpRichTextWidget(
+                        firstTextSpanText: "Don't have an account?",
+                        secondTextSpanText: ' Sign up',
+                        tapGestureRecognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.pushNamed(context, SignUpScreen.name);
+                          },
+                      )
                     ],
                   ),
                 ),
@@ -86,30 +95,6 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildRichText() {
-    return RichText(
-      text: TextSpan(
-        style: const TextStyle(fontWeight: FontWeight.w500),
-        children: [
-          const TextSpan(
-              text: "Don't have an account?",
-              style: TextStyle(
-                color: Colors.black,
-              )),
-          TextSpan(
-              text: " Sign up",
-              style: const TextStyle(
-                color: AppColors.themeColor,
-              ),
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  Navigator.pushNamed(context, SignUpScreen.name);
-                })
-        ],
       ),
     );
   }

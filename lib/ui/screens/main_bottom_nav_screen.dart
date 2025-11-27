@@ -42,7 +42,10 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen> {
         },
         destinations: const [
           NavigationDestination(
-              icon: Icon(Icons.new_label_outlined), label: 'New Task'),
+              icon: Icon(
+                Icons.new_label_outlined,
+              ),
+              label: 'New Task'),
           NavigationDestination(icon: Icon(Icons.done), label: 'Completed'),
           NavigationDestination(
               icon: Icon(Icons.cancel_outlined), label: 'Canceled'),

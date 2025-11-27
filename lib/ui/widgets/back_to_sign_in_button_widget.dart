@@ -12,7 +12,8 @@ class BackToSignInButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        Navigator.pushNamedAndRemoveUntil(context, SignInScreen.name, (predicate)=>false);
+        Navigator.pushNamedAndRemoveUntil(
+            context, SignInScreen.name, (predicate) => false);
       },
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,

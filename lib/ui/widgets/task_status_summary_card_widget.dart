@@ -11,15 +11,14 @@ final String taskCount;
     TextTheme textTheme = Theme.of(context).textTheme;
 
     return Card(
-        color: Colors.white,
+
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 32),
           child: Column(
             children: [
               Text(
                 taskCount,
-                style: textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold, color: Colors.black),
+                style: textTheme.titleMedium
               ),
               Text(
                 taskTitle,

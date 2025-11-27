@@ -99,13 +99,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   Widget _buildPhotoPicker() {
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(
+      decoration: BoxDecoration(
+        color: Theme.of(context).brightness == Brightness.light
+            ? Colors.white
+            : Colors.grey[900],
+        borderRadius: const BorderRadius.all(
           Radius.circular(8),
         ),
       ),
-      height: 52,
+      height: 56,
       child: Row(
         children: [
           Container(
