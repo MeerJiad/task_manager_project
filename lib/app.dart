@@ -27,7 +27,7 @@ class _TaskManagementAppState extends State<TaskManagementApp> {
   }
 
   void initialization() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 6));
     FlutterNativeSplash.remove();
   }
 
