@@ -8,7 +8,7 @@ import 'package:task_manager_project/ui/screens/forgot_pass_verify_pin_screen.da
 import 'package:task_manager_project/ui/screens/main_bottom_nav_screen.dart';
 import 'package:task_manager_project/ui/screens/sign_in_screen.dart';
 import 'package:task_manager_project/ui/screens/sign_up_screen.dart';
-import 'package:task_manager_project/ui/screens/splash_screen.dart';
+
 import 'package:task_manager_project/ui/screens/update_profile_screen.dart';
 import 'package:task_manager_project/ui/utils/app_colors.dart';
 
@@ -194,9 +194,7 @@ class _TaskManagementAppState extends State<TaskManagementApp> {
         initialRoute: SignInScreen.name,
         onGenerateRoute: (RouteSettings settings) {
           late Widget widget;
-          if (settings.name == SplashScreen.name) {
-            widget = const SplashScreen();
-          } else if (settings.name == SignInScreen.name) {
+          if (settings.name == SignInScreen.name) {
             widget = const SignInScreen();
           } else if (settings.name == SignUpScreen.name) {
             widget = const SignUpScreen();

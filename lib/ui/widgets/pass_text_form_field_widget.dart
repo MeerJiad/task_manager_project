@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/validators.dart';
+
 class PassTFFWidget extends StatefulWidget {
   const PassTFFWidget({super.key, required this.controller, required this.hintText});
   final TextEditingController controller;
@@ -14,6 +16,7 @@ class _PassTFFWidgetState extends State<PassTFFWidget> {
 
     return TextFormField(
       controller: widget.controller,
+      validator: (value) => textFormFieldDefaultValidation(value, 'Enter your password'),
       decoration: InputDecoration(
         hintText: widget.hintText,
         suffixIcon: IconButton(

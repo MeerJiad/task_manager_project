@@ -30,8 +30,6 @@ class BackgroundScreen extends StatelessWidget {
         ),
         Scaffold(
           floatingActionButton: floatingActionButton,
-
-
           appBar: appBar,
           body: SafeArea(child: child),
         )
