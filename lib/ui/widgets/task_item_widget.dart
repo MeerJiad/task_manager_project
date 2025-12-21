@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:task_manager_project/ui/utils/snack_bar.dart';
+import 'package:task_manager_project/ui/widgets/dialog_widget.dart';
 
 import '../utils/app_colors.dart';
 
@@ -56,7 +57,24 @@ class TaskItemWidget extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {
-                    _buildShowDialog(context);
+                    dialogWidget(
+                        context: context,
+                        dialogTitle: "Are you sure?",
+                        contentText: "Once deleted,this cannot be undone",
+                        actions: [
+                          OutlinedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                snackBar(
+                                    context: context, text: 'Task deleted!!');
+                              },
+                              child: const Text('Yes')),
+                          OutlinedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('No')),
+                        ]);
                   },
                   icon: const Icon(
                     CupertinoIcons.delete_simple,
@@ -70,35 +88,5 @@ class TaskItemWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<dynamic> _buildShowDialog(BuildContext context) {
-    //show dialog's type is "Future<dynamic>" by default
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Are you sure?'),
-            content: Text("Once delete,this cannot be undone",
-                style: Theme.brightnessOf(context) == Brightness.light
-                    ? const TextStyle(
-                        color: Colors.black87, fontWeight: FontWeight.w400)
-                    : const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w400)),
-            actions: [
-              OutlinedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    snackBar(context: context, text: 'Task deleted!!');
-                  },
-                  child: const Text('Yes')),
-              OutlinedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('No')),
-            ],
-          );
-        });
   }
 }

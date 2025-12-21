@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:task_manager_project/ui/screens/forgot_pass_verify_email_screen.dart';
 import 'package:task_manager_project/ui/screens/sign_up_screen.dart';
 import 'package:task_manager_project/ui/widgets/background_screen_widget.dart';
-import 'package:task_manager_project/ui/widgets/pass_TFF_widget.dart';
+import 'package:task_manager_project/ui/widgets/pass_text_form_field_widget.dart';
 import 'package:task_manager_project/ui/widgets/sign_in_and_sign_up_rich_text_widget.dart';
 import 'main_bottom_nav_screen.dart';
 

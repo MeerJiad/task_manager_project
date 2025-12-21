@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager_project/app.dart';
 import 'package:task_manager_project/ui/screens/update_profile_screen.dart';
+import 'package:task_manager_project/ui/widgets/dialog_widget.dart';
+
+import '../utils/snack_bar.dart';
 
 class TMAppBar extends StatefulWidget implements PreferredSizeWidget {
   //Here 'Tm' means Task manager
@@ -65,12 +68,30 @@ class _TMAppBarState extends State<TMAppBar> {
           ],
         ),
         actions: [
-
           //we can't directly write if-else in the actions that why we used turnery operator here in order to avoid showing logout button in the addNewTask Screen.
           widget.ifAddNewTaskScreen
               ? const SizedBox.shrink()
               : IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    dialogWidget(
+                        context: context,
+                        dialogTitle: "Log out?",
+                        contentText: "Are you sure you want to log out?",
+                        actions: [
+                          OutlinedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                snackBar(
+                                    context: context, text: 'Logged out successfully!!');
+                              },
+                              child: const Text('Yes')),
+                          OutlinedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('No')),
+                        ]);
+                  },
                   icon: const Icon(Icons.logout_outlined),
                 ),
         ]);

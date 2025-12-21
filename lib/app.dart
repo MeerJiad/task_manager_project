@@ -105,7 +105,7 @@ class _TaskManagementAppState extends State<TaskManagementApp> {
             iconSize: 32,
             foregroundColor: Colors.white,
             fixedSize: const Size.fromWidth(double.maxFinite),
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 8),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),

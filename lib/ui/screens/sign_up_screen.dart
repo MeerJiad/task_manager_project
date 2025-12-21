@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager_project/ui/widgets/background_screen_widget.dart';
-import 'package:task_manager_project/ui/widgets/pass_TFF_widget.dart';
+import 'package:task_manager_project/ui/widgets/pass_text_form_field_widget.dart';
 import 'package:task_manager_project/ui/widgets/sign_in_and_sign_up_rich_text_widget.dart';
 
 import '../utils/app_colors.dart';
