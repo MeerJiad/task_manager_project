@@ -1,39 +1,50 @@
 import 'package:flutter/material.dart';
 
-import '../utils/validators.dart';
-
 class PassTFFWidget extends StatefulWidget {
-  const PassTFFWidget({super.key, required this.controller, required this.hintText});
+  const PassTFFWidget(
+      {super.key, required this.controller, required this.hintText});
+
   final TextEditingController controller;
   final String hintText;
+
   @override
   State<PassTFFWidget> createState() => _PassTFFWidgetState();
 }
+
 class _PassTFFWidgetState extends State<PassTFFWidget> {
   bool _obsecurePass = true;
+
   @override
   Widget build(BuildContext context) {
-
     return TextFormField(
       controller: widget.controller,
-      validator: (value) => textFormFieldDefaultValidation(value, 'Enter your password'),
+      validator: (value) {
+        if (value?.trim().isEmpty ?? true) {
+          return 'Enter your password';
+        } else if (value!.length < 8) {
+          //here we used '!' because it will never null here,if it is null then first condition will be true and it will not come to this one.
+          return 'Password must have at least 8 characters';
+        }
+        return null;
+      },
       decoration: InputDecoration(
         hintText: widget.hintText,
         suffixIcon: IconButton(
           onPressed: () {
             setState(() {
-              _obsecurePass =! _obsecurePass; //here it means the current value of _obsecurePass will not be the new value so,it just flips whenever user clicks on the button as it is a boolean if the value was true it becomes false and if false it becomes true.
+              _obsecurePass =
+                  !_obsecurePass; //here it means the current value of _obsecurePass will not be the new value so,it just flips whenever user clicks on the button as it is a boolean if the value was true it becomes false and if false it becomes true.
             });
           },
           icon: _obsecurePass
               ? Icon(
-            Icons.visibility_outlined,
-            color: Colors.grey.shade700,
-          )
+                  Icons.visibility_outlined,
+                  color: Colors.grey.shade700,
+                )
               : Icon(
-            Icons.visibility_off_outlined,
-            color: Colors.grey.shade700,
-          ),
+                  Icons.visibility_off_outlined,
+                  color: Colors.grey.shade700,
+                ),
         ),
       ),
       obscureText: _obsecurePass,

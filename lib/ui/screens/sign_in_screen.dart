@@ -1,9 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:task_manager_project/data/services/network_caller.dart';
 import 'package:task_manager_project/ui/screens/forgot_pass_verify_email_screen.dart';
 import 'package:task_manager_project/ui/screens/sign_up_screen.dart';
+import 'package:task_manager_project/ui/utils/api_urls.dart';
+import 'package:task_manager_project/ui/utils/snack_bar.dart';
+import 'package:task_manager_project/ui/utils/validators.dart';
 import 'package:task_manager_project/ui/widgets/background_screen_widget.dart';
+import 'package:task_manager_project/ui/widgets/centered_circular_progress_indicator.dart';
+import 'package:task_manager_project/ui/widgets/dialog_widget.dart';
 import 'package:task_manager_project/ui/widgets/pass_text_form_field_widget.dart';
 import 'package:task_manager_project/ui/widgets/sign_in_and_sign_up_rich_text_widget.dart';
 import 'main_bottom_nav_screen.dart';
@@ -21,6 +27,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final TextEditingController _emailTEC = TextEditingController();
   final TextEditingController _passTEC = TextEditingController();
+  bool _showLoader = false;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +54,8 @@ class _SignInScreenState extends State<SignInScreen> {
                   controller: _emailTEC,
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(hintText: 'Email'),
+                  validator: (value) =>
+                      textFormFieldDefaultValidation(value, "Enter your email"),
                 ),
                 const SizedBox(
                   height: 20,
@@ -58,17 +67,20 @@ class _SignInScreenState extends State<SignInScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(
-                        context, MainBottomNavScreen.name);
-                  },
-                  child: const Icon(
-                    CupertinoIcons.arrow_right_circle,
+                Visibility(
+                  visible: _showLoader == false,
+                  replacement: const CenteredCircularProgressIndicator(),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _buildSignInButtonOnTap();
+                    },
+                    child: const Icon(
+                      CupertinoIcons.arrow_right_circle,
+                    ),
                   ),
                 ),
                 const SizedBox(
-                  height: 70,
+                  height: 60,
                 ),
                 Center(
                   child: Column(
@@ -97,6 +109,49 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
       ),
     );
+  }
+
+  void _buildSignInButtonOnTap() {
+    if (_formKey.currentState!.validate()) {
+      _login();
+    }
+  }
+
+  Future<void> _login() async {
+    setState(() {
+      _showLoader = true;
+    });
+    Map<String, String> loginPostRequestBody = {
+      "email": _emailTEC.text.trim(),
+      "password": _passTEC.text,
+      // //we will not trim pass because some user can give space here.
+    };
+    NetworkResponse response = await NetworkCaller.postRequest(
+      url: ApiUrls.loginUrl,
+      body: loginPostRequestBody,
+    );
+    setState(() {
+      _showLoader = false;
+    });
+    if (response.isSuccess) {
+      Navigator.pushReplacementNamed(context, MainBottomNavScreen.name);
+      snackBar(context: context, text: "Logged in successfully");
+    } else if (response.statusCode == 401) {
+      dialogWidget(
+          context: context,
+          dialogTitle: 'Wrong credentials',
+          contentText: 'Invalid username or password',
+          actions: [
+            OutlinedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Ok'),
+            ),
+          ]);
+    } else {
+      snackBar(context: context, text: response.errorMessage);
+    }
   }
 
   @override

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +21,6 @@ class SignUpScreen extends StatefulWidget {
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-bool showLoader = false;
-
 class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final TextEditingController _emailTEC = TextEditingController();
@@ -32,6 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _lastNameTEC = TextEditingController();
   final TextEditingController _mobileTEC = TextEditingController();
   final TextEditingController _passTEC = TextEditingController();
+  bool _showLoader = false;
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +104,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Visibility(
-                  visible: showLoader == false,
+                  visible: _showLoader == false,
                   replacement: const CenteredCircularProgressIndicator(),
                   child: ElevatedButton(
                     onPressed: () {
@@ -138,26 +135,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _buildSignUpButtonOnTap() {
     //we don't wanna keep the code of api calling in the ui code ,that's why we have did method extraction manually.
     if (_formKey.currentState!.validate()) {
-      _signUpApiCall();
+      _signUp();
     }
   }
 
-  Future<void> _signUpApiCall() async {
+  Future<void> _signUp() async {
     setState(() {
-      showLoader = true;
+      _showLoader = true;
     });
-    Map<String, String> postRequestBody = {
+    Map<String, String> registrationPostRequestBody = {
       "email": _emailTEC.text.trim(),
       "firstName": _firstNameTEC.text.trim(),
       "lastName": _lastNameTEC.text.trim(),
       "mobile": _mobileTEC.text.trim(),
-      "password": _passTEC.text.trim(),
-      "photo": ""
+      "password": _passTEC.text,
+      //we will not trim pass because some user can give space here.
+      "photo": "",
     };
     NetworkResponse response = await NetworkCaller.postRequest(
-        url: ApiUrls.registrationUrl, body: postRequestBody);
+        url: ApiUrls.registrationUrl, body: registrationPostRequestBody);
     setState(() {
-      showLoader = false;
+      _showLoader = false;
     });
     if (response.isSuccess) {
       Navigator.pushReplacementNamed(context, SignInScreen.name);

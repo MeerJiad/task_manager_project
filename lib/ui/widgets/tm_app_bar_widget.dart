@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager_project/app.dart';
+import 'package:task_manager_project/ui/screens/sign_in_screen.dart';
 import 'package:task_manager_project/ui/screens/update_profile_screen.dart';
 import 'package:task_manager_project/ui/widgets/dialog_widget.dart';
 
@@ -80,9 +80,11 @@ class _TMAppBarState extends State<TMAppBar> {
                         actions: [
                           OutlinedButton(
                               onPressed: () {
-                                Navigator.pop(context);
+                                Navigator.pushReplacementNamed(
+                                    context, SignInScreen.name);
                                 snackBar(
-                                    context: context, text: 'Logged out successfully!!');
+                                    context: context,
+                                    text: 'Logged out successfully!!');
                               },
                               child: const Text('Yes')),
                           OutlinedButton(
