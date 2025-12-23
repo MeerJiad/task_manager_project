@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager_project/ui/controllers/auth_controllers.dart';
 import 'package:task_manager_project/ui/screens/sign_in_screen.dart';
 import 'package:task_manager_project/ui/screens/update_profile_screen.dart';
 import 'package:task_manager_project/ui/widgets/dialog_widget.dart';
@@ -30,7 +31,9 @@ class _TMAppBarState extends State<TMAppBar> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    //final currentTheme = Theme.of(context).brightness;
+    // final currentBrightness = Theme.of(context).brightness;
+    //final bool isLightTheme = Brightness.light == currentBrightness;
+    //print(isLightTheme);
     return AppBar(
         title: Row(
           //    //we are using title instead of leading because leading stays square and on the left so does some problem with our ui
@@ -54,11 +57,12 @@ class _TMAppBarState extends State<TMAppBar> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Meer Sun',
+                      AuthControllers.userModel?.fullName ?? 'User',
+                      //'?.' it means that firstName can be null and if the firstName is null then the text will be ''
                       style: textTheme.labelLarge,
                     ),
                     Text(
-                      'meersun08@gmail.com',
+                      AuthControllers.userModel?.email ?? '',
                       style: textTheme.bodySmall,
                     ),
                   ],
@@ -80,8 +84,9 @@ class _TMAppBarState extends State<TMAppBar> {
                         actions: [
                           OutlinedButton(
                               onPressed: () {
-                                Navigator.pushReplacementNamed(
-                                    context, SignInScreen.name);
+                                AuthControllers.removeUserData();
+                                Navigator.pushNamedAndRemoveUntil(context,
+                                    SignInScreen.name, (predicate) => false);
                                 snackBar(
                                     context: context,
                                     text: 'Logged out successfully!!');

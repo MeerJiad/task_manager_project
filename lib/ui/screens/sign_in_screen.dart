@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:task_manager_project/data/models/user_model.dart';
 import 'package:task_manager_project/data/services/network_caller.dart';
+import 'package:task_manager_project/ui/controllers/auth_controllers.dart';
 import 'package:task_manager_project/ui/screens/forgot_pass_verify_email_screen.dart';
 import 'package:task_manager_project/ui/screens/sign_up_screen.dart';
 import 'package:task_manager_project/ui/utils/api_urls.dart';
@@ -41,7 +43,7 @@ class _SignInScreenState extends State<SignInScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
-                  height: 160,
+                  height: 180,
                 ),
                 Text(
                   'Get Started With',
@@ -134,6 +136,13 @@ class _SignInScreenState extends State<SignInScreen> {
       _showLoader = false;
     });
     if (response.isSuccess) {
+      String token = response.responseBody["token"];
+      UserModel userModel = UserModel.fromResponseBodyJson(response
+              .responseBody[
+          "data"]); //we call named constructors in this way,like normal methods of a class.
+
+      await AuthControllers.saveUserData(token, userModel);
+      await AuthControllers.getUserData();               //when data is saved,it will get the data then
       Navigator.pushReplacementNamed(context, MainBottomNavScreen.name);
       snackBar(context: context, text: "Logged in successfully");
     } else if (response.statusCode == 401) {

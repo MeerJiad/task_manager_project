@@ -1,6 +1,6 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:task_manager_project/ui/screens/InitialScreenDeciderScreen.dart';
 import 'package:task_manager_project/ui/screens/add_new_task_screen.dart';
 import 'package:task_manager_project/ui/screens/forgot_pass_set_pass_screen.dart';
 import 'package:task_manager_project/ui/screens/forgot_pass_verify_email_screen.dart';
@@ -8,7 +8,6 @@ import 'package:task_manager_project/ui/screens/forgot_pass_verify_pin_screen.da
 import 'package:task_manager_project/ui/screens/main_bottom_nav_screen.dart';
 import 'package:task_manager_project/ui/screens/sign_in_screen.dart';
 import 'package:task_manager_project/ui/screens/sign_up_screen.dart';
-
 import 'package:task_manager_project/ui/screens/update_profile_screen.dart';
 import 'package:task_manager_project/ui/utils/app_colors.dart';
 
@@ -22,13 +21,7 @@ class TaskManagementApp extends StatefulWidget {
 class _TaskManagementAppState extends State<TaskManagementApp> {
   @override
   void initState() {
-    initialization();
     super.initState();
-  }
-
-  void initialization() async {
-    await Future.delayed(const Duration(seconds: 6));
-    FlutterNativeSplash.remove();
   }
 
   @override
@@ -191,10 +184,14 @@ class _TaskManagementAppState extends State<TaskManagementApp> {
             brightness: Brightness.dark,
             scaffoldBackgroundColor: Colors.black),
         debugShowCheckedModeBanner: false,
-        initialRoute: SignInScreen.name,
+        initialRoute: InitialScreenDecider.name,
+
+        //we will navigate to the first screen from splash screen,so no need to set initial route.That's a good way to handle routing.
         onGenerateRoute: (RouteSettings settings) {
           late Widget widget;
-          if (settings.name == SignInScreen.name) {
+          if (settings.name == InitialScreenDecider.name) {
+            widget = const InitialScreenDecider();
+          } else if (settings.name == SignInScreen.name) {
             widget = const SignInScreen();
           } else if (settings.name == SignUpScreen.name) {
             widget = const SignUpScreen();
@@ -208,7 +205,7 @@ class _TaskManagementAppState extends State<TaskManagementApp> {
             widget = const MainBottomNavScreen();
           } else if (settings.name == AddNewTaskScreen.name) {
             widget = const AddNewTaskScreen();
-          } else if (settings.name == UpdateProfileScreen.name) {
+          } else {
             widget = const UpdateProfileScreen();
           }
           return MaterialPageRoute(builder: (BuildContext context) {

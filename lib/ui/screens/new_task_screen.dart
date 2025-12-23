@@ -16,12 +16,12 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return BackgroundScreen(
-     floatingActionButton:  FloatingActionButton(
-       onPressed: () {
-         Navigator.pushNamed(context, AddNewTaskScreen.name);
-       },
-       child: const Icon(Icons.add),
-     ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, AddNewTaskScreen.name);
+        },
+        child: const Icon(Icons.add),
+      ),
       appBar: const TMAppBar(),
       child: SingleChildScrollView(
         child: Padding(
