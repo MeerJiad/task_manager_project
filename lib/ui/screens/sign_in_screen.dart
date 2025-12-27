@@ -29,7 +29,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final TextEditingController _emailTEC = TextEditingController();
   final TextEditingController _passTEC = TextEditingController();
-  bool _showLoader = false;
+  bool _postSignInUserInProgress = false;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   height: 20,
                 ),
                 Visibility(
-                  visible: _showLoader == false,
+                  visible: _postSignInUserInProgress == false,
                   replacement: const CenteredCircularProgressIndicator(),
                   child: ElevatedButton(
                     onPressed: () {
@@ -121,19 +121,20 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Future<void> _login() async {
     setState(() {
-      _showLoader = true;
+      _postSignInUserInProgress = true;
     });
     Map<String, String> loginPostRequestBody = {
       "email": _emailTEC.text.trim(),
       "password": _passTEC.text,
       // //we will not trim pass because some user can give space here.
     };
+
     NetworkResponse response = await NetworkCaller.postRequest(
       url: ApiUrls.loginUrl,
       body: loginPostRequestBody,
     );
     setState(() {
-      _showLoader = false;
+      _postSignInUserInProgress = false;
     });
     if (response.isSuccess) {
       String token = response.responseBody["token"];
@@ -142,11 +143,12 @@ class _SignInScreenState extends State<SignInScreen> {
           "data"]); //we call named constructors in this way,like normal methods of a class.
 
       await AuthControllers.saveUserData(token, userModel);
-      await AuthControllers.getUserData();               //when data is saved,it will get the data then
+      await AuthControllers
+          .getUserData(); //when data is saved,it will get the data then
       Navigator.pushReplacementNamed(context, MainBottomNavScreen.name);
       snackBar(context: context, text: "Logged in successfully");
     } else if (response.statusCode == 401) {
-      dialogWidget(
+      showDialogMethod(
           context: context,
           dialogTitle: 'Wrong credentials',
           contentText: 'Invalid username or password',

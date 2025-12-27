@@ -1,8 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:task_manager_project/data/services/network_caller.dart';
+import 'package:task_manager_project/ui/controllers/auth_controllers.dart';
+import 'package:task_manager_project/ui/screens/main_bottom_nav_screen.dart';
+import 'package:task_manager_project/ui/screens/new_task_screen.dart';
+import 'package:task_manager_project/ui/utils/api_urls.dart';
+import 'package:task_manager_project/ui/utils/snack_bar.dart';
+import 'package:task_manager_project/ui/utils/validators.dart';
 import 'package:task_manager_project/ui/widgets/background_screen_widget.dart';
+import 'package:task_manager_project/ui/widgets/centered_circular_progress_indicator.dart';
 import 'package:task_manager_project/ui/widgets/tm_app_bar_widget.dart';
-
 
 class AddNewTaskScreen extends StatefulWidget {
   const AddNewTaskScreen({super.key});
@@ -17,12 +24,15 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   final TextEditingController _titleTEC = TextEditingController();
   final TextEditingController _descriptionTEC = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _postAddTaskInProgress = false;
 
   @override
   Widget build(BuildContext context) {
     return BackgroundScreen(
-     appBar: const TMAppBar(ifAddNewTaskScreen: true,),
-          child: SingleChildScrollView(
+      appBar: const TMAppBar(
+        ifAddNewTaskScreen: true,
+      ),
+      child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Form(
@@ -40,7 +50,9 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                 const SizedBox(height: 32),
                 TextFormField(
                   controller: _titleTEC,
-                  decoration: const InputDecoration(hintText: 'Subject'),
+                  decoration: const InputDecoration(hintText: 'Task'),
+                  validator: (value) => textFormFieldDefaultValidation(
+                      value, 'Enter the task title'),
                 ),
                 const SizedBox(
                   height: 20,
@@ -53,9 +65,15 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Icon(CupertinoIcons.arrow_right_circle),
+                Visibility(
+                  visible: _postAddTaskInProgress == false,
+                  replacement: const CenteredCircularProgressIndicator(),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _buildAddTaskButtonOnTap();
+                    },
+                    child: const Icon(CupertinoIcons.arrow_right_circle),
+                  ),
                 ),
               ],
             ),
@@ -63,6 +81,38 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
         ),
       ),
     );
+  }
+
+  void _buildAddTaskButtonOnTap() {
+    if (_formKey.currentState!.validate()) {
+      _createTask();
+    }
+  }
+
+  Future<void> _createTask() async{
+    setState(() {
+      _postAddTaskInProgress = true;
+    });
+    Map<String, String> createTaskPostRequestBody = {
+      "title": _titleTEC.text.trim(),
+      "description": _descriptionTEC.text.trim(),                 //As we did '_descriptionTEC.text.trim()',so database will receive ""(empty string) even if user leaves the textFormField empty because '.text'  converts anything into String.
+      "status": "New"
+    };
+    NetworkResponse response = await NetworkCaller.postRequest(
+      url: ApiUrls.createTaskUrl,
+      body: createTaskPostRequestBody,
+    );
+    setState(() {
+      _postAddTaskInProgress = false;
+    });
+ if(response.isSuccess){
+   Navigator.pushNamedAndRemoveUntil(context,MainBottomNavScreen.name,(predicate)=>false);
+   snackBar(context: context, text:'Task Added Successfully');
+ }else{
+   snackBar(context: context, text:response.errorMessage);
+ }
+
+
   }
 
   @override

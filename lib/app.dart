@@ -54,6 +54,7 @@ class _TaskManagementAppState extends State<TaskManagementApp> {
       ),
     );
     final lightTheme = ThemeData(
+      progressIndicatorTheme: ProgressIndicatorThemeData(refreshBackgroundColor: Colors.transparent),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
           foregroundColor: Colors.black, backgroundColor: AppColors.themeColor),
       listTileTheme: const ListTileThemeData(
@@ -208,9 +209,7 @@ class _TaskManagementAppState extends State<TaskManagementApp> {
           } else {
             widget = const UpdateProfileScreen();
           }
-          return MaterialPageRoute(builder: (BuildContext context) {
-            return widget;
-          });
+          return MaterialPageRoute(builder: (BuildContext context) => widget);
         });
   }
 }

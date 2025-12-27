@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:task_manager_project/data/models/task_model.dart';
+import 'package:task_manager_project/data/services/network_caller.dart';
+import 'package:task_manager_project/ui/controllers/auth_controllers.dart';
+import 'package:task_manager_project/ui/utils/api_urls.dart';
 import 'package:task_manager_project/ui/utils/snack_bar.dart';
 import 'package:task_manager_project/ui/widgets/dialog_widget.dart';
 
@@ -8,7 +12,12 @@ import '../utils/app_colors.dart';
 class TaskItemWidget extends StatelessWidget {
   const TaskItemWidget({
     super.key,
+    required this.taskModel,
+    required this.onTaskDelete,
   });
+
+  final TaskModel taskModel;
+  final VoidCallback onTaskDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -19,19 +28,19 @@ class TaskItemWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: ListTile(
-        title: const Text('Task title'),
+        title: Text(taskModel.title ?? ''),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(
               height: 4,
             ),
-            const Text('Task description'),
+            Text(taskModel.description ?? ''),
             const SizedBox(
               height: 8,
             ),
             Text(
-              'Date : 08/11/2025',
+              "Date: ${taskModel.createdDate ?? ''}",
               style: textTheme.labelMedium,
             ),
             const SizedBox(
@@ -39,9 +48,9 @@ class TaskItemWidget extends StatelessWidget {
             ),
             Row(
               children: [
-                const Chip(
+                Chip(
                   label: Text(
-                    'Status',
+                    taskModel.status ?? '',
                   ),
                   visualDensity: VisualDensity.compact,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -57,13 +66,15 @@ class TaskItemWidget extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {
-                    dialogWidget(
+                    showDialogMethod(
                         context: context,
                         dialogTitle: "Are you sure?",
                         contentText: "Once deleted,this cannot be undone",
                         actions: [
                           OutlinedButton(
                               onPressed: () {
+                                _deleteTask();
+                                onTaskDelete();
                                 Navigator.pop(context);
                                 snackBar(
                                     context: context, text: 'Task deleted!!');
@@ -88,5 +99,10 @@ class TaskItemWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _deleteTask() async {
+    final NetworkResponse response = await NetworkCaller.getRequest(
+        url: ApiUrls.deleteTaskUrl(id: taskModel.id!));
   }
 }

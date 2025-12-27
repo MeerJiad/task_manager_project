@@ -3,7 +3,6 @@ import 'package:task_manager_project/ui/controllers/auth_controllers.dart';
 import 'package:task_manager_project/ui/screens/sign_in_screen.dart';
 import 'package:task_manager_project/ui/screens/update_profile_screen.dart';
 import 'package:task_manager_project/ui/widgets/dialog_widget.dart';
-
 import '../utils/snack_bar.dart';
 
 class TMAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -31,12 +30,9 @@ class _TMAppBarState extends State<TMAppBar> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    // final currentBrightness = Theme.of(context).brightness;
-    //final bool isLightTheme = Brightness.light == currentBrightness;
-    //print(isLightTheme);
     return AppBar(
         title: Row(
-          //    //we are using title instead of leading because leading stays square and on the left so does some problem with our ui
+             //we are using title instead of leading because leading stays square and on the left so does some problem with our ui
 
           children: [
             GestureDetector(
@@ -77,7 +73,7 @@ class _TMAppBarState extends State<TMAppBar> {
               ? const SizedBox.shrink()
               : IconButton(
                   onPressed: () {
-                    dialogWidget(
+                    showDialogMethod(
                         context: context,
                         dialogTitle: "Log out?",
                         contentText: "Are you sure you want to log out?",

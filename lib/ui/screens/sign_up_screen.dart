@@ -28,7 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _lastNameTEC = TextEditingController();
   final TextEditingController _mobileTEC = TextEditingController();
   final TextEditingController _passTEC = TextEditingController();
-  bool _showLoader = false;
+  bool _postSignUpInProgress = false;
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +104,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Visibility(
-                  visible: _showLoader == false,
+                  visible: _postSignUpInProgress == false,
                   replacement: const CenteredCircularProgressIndicator(),
                   child: ElevatedButton(
                     onPressed: () {
@@ -141,7 +141,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Future<void> _signUp() async {
     setState(() {
-      _showLoader = true;
+      _postSignUpInProgress = true;
     });
     Map<String, String> registrationPostRequestBody = {
       "email": _emailTEC.text.trim(),
@@ -153,9 +153,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
       "photo": "",
     };
     NetworkResponse response = await NetworkCaller.postRequest(
-        url: ApiUrls.registrationUrl, body: registrationPostRequestBody);
+      url: ApiUrls.registrationUrl,
+      body: registrationPostRequestBody,
+    );
     setState(() {
-      _showLoader = false;
+      _postSignUpInProgress = false;
     });
     if (response.isSuccess) {
       Navigator.pushReplacementNamed(context, SignInScreen.name);
